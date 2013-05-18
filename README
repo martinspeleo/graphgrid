@@ -4,24 +4,33 @@ Quick start instructions
 Install required software (Ubuntu):
     sudo apt-get install virtualenvwrapper sqlite3 git
 
+Setup your git user details
+    git config --global user.name "Your Name"
+    git config --global user.email you@example.com
+
 Clone the repository:
-    git clone ...
+    git clone https://github.com/martinspeleo/graphgrid.git
+
+Configure virtualenv by following instructions in /etc/bash_completion.d/virtualenvwrapper
 
 Create a virtual environment:
-    mkvirtualenv -r requirements.txt env1
+    mkvirtualenv -r requirements graphgrid
 
 Edit cellcounter/localsettings.py to contain the following:
 DATABASES = {'default': {
     'ENGINE': 'django.db.backends.sqlite3',
-    'NAME': '/full/path/to/cellcounter/db.sql'
+    'NAME': '/path/to/graphgrid/db.sql'
     }
 }
 
-STATICFILES_DIRS = ('/full/path/to/cellcounter/static/',)
+STATICFILES_DIRS = ('/path/to/graphgrid/static/',)
 DEBUG = True
 
 Build the database:
     python manage.py syncdb
+
+Apply database migrations:
+    python manage.py migrate
 
 Run the Django webserver:
     python manage.py runserver
