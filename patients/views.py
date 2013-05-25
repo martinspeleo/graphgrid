@@ -1,5 +1,9 @@
 from patients.forms import *
-from django.shortcuts import render, redirect
+from patients.models import *
+
+from django.shortcuts import render, redirect, get_object_or_404
+from django.http import HttpResponse
+import json
 
 def registerPatient(request):
     if request.method == 'POST':
@@ -24,4 +28,11 @@ def patientObservation(request):
         "form": form,
     })
 
+def getObs(request, mrn, obs):
+    patient = get_object_or_404(Patient, mrn = mrn)
+    numericobservationtype = get_object_or_404(NumericObservationType, name = obs)
+    obs = NumericObservation.objects.filter(patient = patient, observation_type = numericobservationtype)
+    response = HttpResponse()#content_type='text/json')    
+    response.write(json.dumps([(o.datetime.isoformat(), o.value) for o in obs]))
+    return response
 
