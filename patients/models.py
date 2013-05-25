@@ -6,20 +6,20 @@ class Patient(models.Model):
     dob = models.DateField("date of birth")
     mrn = models.CharField("medical_record_number", max_length=20, unique = True)
 
-    def __unicode___(self):
+    def __unicode__(self):
         return self.mrn
 
 class NumericObservationType(models.Model):
     name = models.CharField(max_length=200, unique = True)
     units = models.CharField(max_length=200)
 
-    def __unicode___(self):
+    def __unicode__(self):
         return self.name
 
 class NumericObservation(models.Model):
     patient = models.ForeignKey("Patient")
     observation_type = models.ForeignKey("NumericObservationType")
     value = models.FloatField()
-
-    def __unicode___(self):
+    datetime = models.DateTimeField()
+    def __unicode__(self):
         return u"%s: %s: %f" % (self.patient, self.observation_type, self.value)
