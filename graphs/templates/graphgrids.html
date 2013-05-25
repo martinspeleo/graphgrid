@@ -1,0 +1,7 @@
+{% extends "base.html" %}
+{% block content %}
+<ul>
+{% for graphgrid in graphgrids %}
+<li><a href="{% url 'viewgrid' graphgrid.name %}">{{ graphgrid }}</a></li>
+{% endfor %}
+</ul>{% endblock %}
