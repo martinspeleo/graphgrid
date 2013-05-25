@@ -30,9 +30,10 @@ class ObservationGraph(models.Model):
         return "%s(%i, %i)" % (self.graph_grid, self.row, self.column)
 
 class ObservationGraphSeries(models.Model):
+    class Meta: 
+        verbose_name_plural = "Observation Graph Series"
     observation_graph =  models.ForeignKey("ObservationGraph")
     observation_type =  models.ForeignKey("patients.NumericObservationType")
     colour = RGBColorField()
-
     def __unicode__(self):
         return "%s: %s" % (self.observation_graph, self.observation_type)
