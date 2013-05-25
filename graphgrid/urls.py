@@ -8,7 +8,8 @@ urlpatterns = patterns('',
     # Examples:
     url(r'^$', 'graphs.views.home', name='home'),
     url(r'^graphgrid/(.*)$', 'graphs.views.graphgrid', name='viewgrid'),
-
+    url(r'^registerpatient$', 'patients.views.registerPatient', name='registerPatient'),
+    url(r'^$', 'patients.views.patientObservation', name='patientObservation'),
     # Uncomment the admin/doc line below to enable admin documentation:
      url(r'^admin/doc/', include('django.contrib.admindocs.urls')),
 
