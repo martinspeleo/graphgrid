@@ -6,7 +6,7 @@
 *~
 
 # sqllite database
-db.sql
+*.sql
 
 #Local settings
 graphgrid/localsettings.py
