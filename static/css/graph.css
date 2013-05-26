@@ -1,0 +1,10 @@
+table, th, td, tr
+{
+border: 0px;
+padding: 0px;
+margin: 0px;
+}
+table, th, td, tr
+{
+border-collapse:collapse;
+}
