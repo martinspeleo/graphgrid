@@ -18,4 +18,9 @@ def vitalsVis(request, mrn):
     datetimefivedays = datetime.datetime.strftime(datetimefivedaystemp, "%Y-%m-%d-%H-%M")
     datenow = datetime.datetime.strftime( datetime.datetime.now(), "%d/%m/%Y")
     timenow = datetime.datetime.strftime( datetime.datetime.now(), "%H:%M")
-    return render(request, 'vitalsvis.html', {'patient': patient, 'datenow': datenow, 'timenow': timenow, 'datetimeoneday': datetimeoneday, 'datetimefivedays': datetimefivedays})
+    try: 
+        recentRR = "%0.f" % NumericObservation.objects.filter( patient = patient, observation_type__name = "Respiratory Rate" ).order_by("-datetime")[0].value
+    except:
+        recentRR = "-"
+	
+    return render(request, 'vitalsvis.html', {'patient': patient, 'datenow': datenow, 'timenow': timenow, 'datetimeoneday': datetimeoneday, 'datetimefivedays': datetimefivedays, 'recentRR': recentRR})
