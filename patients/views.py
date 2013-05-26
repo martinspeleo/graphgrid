@@ -54,9 +54,8 @@ def g(request, mrn, obs, start, end, compass, height, width, min_, max_, refmin,
     refmax = float(refmax)     
 
     patient = get_object_or_404(Patient, mrn = mrn)
-    numericobservationtype = get_object_or_404(NumericObservationType, name = obs)
 
-    fig=Figure(figsize=(float(height) / 80., float(width) / 80.))
+    fig=Figure(figsize=(float(width) / 80., float(height) / 80.))
     ax=fig.add_subplot(111)
     c = compass.lower()
     fig.subplots_adjust(left={True: 0.2, False:0}["w" in c], 
@@ -66,8 +65,17 @@ def g(request, mrn, obs, start, end, compass, height, width, min_, max_, refmin,
     #ax.set_frame_on(False)
     x=[]
     y=[]
-    nos = NumericObservation.objects.filter(patient = patient, observation_type = numericobservationtype)
-    ax.plot_date([no.datetime for no in nos], [no.value for no in nos], '.')
+    if obs == "bp":
+        sbpt = get_object_or_404(NumericObservationType, name = "Systolic Blood Pressure")
+        dbpt = get_object_or_404(NumericObservationType, name = "Diastolic Blood Pressure")
+        sbp = NumericObservation.objects.filter(patient = patient, observation_type = numericobservationtype)
+        sbp = NumericObservation.objects.filter(patient = patient, observation_type = numericobservationtype)
+        ax.plot_date([no.datetime for no in nos], [no.value for no in nos], '.')    
+    else:
+        numericobservationtype = get_object_or_404(NumericObservationType, name = obs)
+        nos = NumericObservation.objects.filter(patient = patient, observation_type = numericobservationtype)
+        ax.plot_date([no.datetime for no in nos], [no.value for no in nos], '.')
+    
     ax.set_xlim( (start, end) )
     ax.set_ylim( (min_, max_) )
     ax.xaxis.set_ticks([start, end])
