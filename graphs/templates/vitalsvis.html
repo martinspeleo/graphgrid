@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% load staticfiles %}
+{% block extra_headers %}
+{% endblock %}
+{% block title %} VitalsVis {% endblock %}
+{% block content %}
+<h1>Date: {{ datetimenow.day }}-{{ datetimenow.month }}-{{ datetimenow.year }} Time: {{ datetimenow.hour }}:{{ datetimenow.minute }}</h1>
+<h2>Name: {{ patient.first_name }} {{ patient.last_name }} </h2>
+<h3>DOB: {{ patient.dob }} MRN: {{ patient.mrn }}</h3>
+<table>
+	<tr>
+		<td>
+			<img src="{% url "g" mrn=patient.mrn obs="Respiratory Rate" start="2010-10-25-00-00" end="2010-10-30-00-00" compass="NW" height="90" width="310" min_="0" max_="40" refmin="12" refmax="20" %}"
+		</td>
+		<td>
+			<img src="{% url "g" mrn=patient.mrn obs="Respiratory Rate" start="2010-10-30-00-00" end="2010-11-01-00-00" compass="NE" height="90" width="310" min_="0" max_="40" refmin="12" refmax="20" %}"
+		</td>
+		<td>
+	</tr>
+	<tr>
+	<td>
+			<img src="{% url "g" mrn=patient.mrn obs="Oxygen Saturation" start="2010-10-25-00-00" end="2010-10-30-00-00" compass="NW" height="90" width="310" min_="0" max_="40" refmin="12" refmax="20" %}"
+		</td>
+		<td>
+			<img src="{% url "g" mrn=patient.mrn obs="Oxygen Saturation" start="2010-10-30-00-00" end="2010-11-01-00-00" compass="NE" height="90" width="310" min_="0" max_="40" refmin="12" refmax="20" %}"
+		</td>
+	</tr>
+</table>
+	
+{% endblock %}

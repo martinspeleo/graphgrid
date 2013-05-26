@@ -4,33 +4,43 @@
 {% block extra_headers %}
 <style>.observation_graph {height:180px; width:180px}</style>
 <!--[if lt IE 9]><script language="javascript" type="text/javascript" src="{% static "jqPlot/excanvas.js" %}"></script><![endif]-->
-<script language="javascript" type="text/javascript" src="{% static "jqPlot/jquery.min.js" %}"></script>
-<script language="javascript" type="text/javascript" src="{% static "jqPlot/jquery.jqplot.min.js" %}"></script>
-<link rel="stylesheet" type="text/css" href="{% static "jqPlot/jquery.jqplot.css" %}" />
+<script type="text/javascript" src="../jquery.min.js"></script>
+<script type="text/javascript" src="../jquery.jqplot.min.js"></script>
+<script type="text/javascript" src="../plugins/jqplot.json2.min.js"></script>
+<link rel="stylesheet" type="text/css" hrf="../jquery.jqplot.min.css" />
 <script language="javascript">
 $(document).ready(function(){
-  var sineRenderer = function() {
-    var data = [[], []];
-    for (var i=0; i<13; i+=0.5) {
-      data[0].push([i, Math.sin(i)]);
-      data[1].push([i, Math.cos(i)]);
-    }
-    return data;
-  };
-  $('.observation_graph').each(
-      function(index, graph){
-        var g = $(graph);
-        var series =[];
-        g.children("span.observation_series").each(
-          function(i, s){series.push({color: $(s).attr("colour")});   
-                         }
-          );
-        g.jqplot([],{
-        dataRenderer: sineRenderer,
-        series: series
-        });  
+  // Our ajax data renderer which here retrieves a text file.
+  // it could contact any source and pull data, however.
+  // The options argument isn't used in this renderer.
+  var ajaxDataRenderer = function(url, plot, options) {
+    var ret = null;
+    $.ajax({
+      // have to use synchronous here, else the function 
+      // will return before the data is fetched
+      async: false,
+      url: url,
+      dataType:"json",
+      success: function(data) {
+        ret = data;
       }
-   );
+    });
+    return ret;
+  };
+ 
+  // The url for our json data
+  var jsonurl = "./jsondata.txt";
+ 
+  // passing in the url string as the jqPlot data argument is a handy
+  // shortcut for our renderer.  You could also have used the
+  // "dataRendererOptions" option to pass in the url.
+  var plot2 = $.jqplot('chart2', jsonurl,{
+    title: "AJAX JSON Data Renderer",
+    dataRenderer: ajaxDataRenderer,
+    dataRendererOptions: {
+      unusedOptionalUrl: jsonurl
+    }
+  });
 });
 </script>
 {% endblock %}
