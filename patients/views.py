@@ -69,9 +69,14 @@ def g(request, mrn, obs, start, end, compass, height, width, min_, max_, refmin,
         sbpt = get_object_or_404(NumericObservationType, name = "Systolic Blood Pressure")
         dbpt = get_object_or_404(NumericObservationType, name = "Diastolic Blood Pressure")
         sbp = NumericObservation.objects.filter(patient = patient, observation_type = sbpt)
-        dbp = NumericObservation.objects.filter(patient = patient, observation_type = dbpt)
-        ax.plot_date([no.datetime for no in sbp], [no.value for no in sbp], '.') 
-        ax.plot_date([no.datetime for no in dbp], [no.value for no in dbp], '.')    
+        #dbp = NumericObservation.objects.filter(patient = patient, observation_type = dbpt)
+        for s in sbp:#HACK||||||||
+            try:
+                d = NumericObservation.objects.get(patient = patient, observation_type = dbpt, datetime = s.datetime)
+                ax.plot_date([s.datetime, d.datetime], [s.value, d.value], "b-")
+            except:
+                pass
+        
     else:
         numericobservationtype = get_object_or_404(NumericObservationType, name = obs)
         nos = NumericObservation.objects.filter(patient = patient, observation_type = numericobservationtype)
