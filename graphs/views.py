@@ -16,6 +16,6 @@ def vitalsVis(request, mrn):
     datetimeoneday = datetime.datetime.strftime(datetimeonedaytemp, "%Y-%m-%d-%H-%M")
     datetimefivedaystemp = datetime.datetime.now() - datetime.timedelta(5) 
     datetimefivedays = datetime.datetime.strftime(datetimefivedaystemp, "%Y-%m-%d-%H-%M")
-    datenow = datetime.datetime.strftime( datetime.datetime.now, "%d/%m/%Y")
-    timenow = datetime.datetime.strftime( datetime.datetime.now, "%H:%M")
+    datenow = datetime.datetime.strftime( datetime.datetime.now(), "%d/%m/%Y")
+    timenow = datetime.datetime.strftime( datetime.datetime.now(), "%H:%M")
     return render(request, 'vitalsvis.html', {'patient': patient, 'datenow': datenow, 'timenow': timenow, 'datetimeoneday': datetimeoneday, 'datetimefivedays': datetimefivedays})
