@@ -44,6 +44,14 @@ def g(request, mrn, obs, start, end, compass, height, width, min_, max_, refmin,
     from matplotlib.backends.backend_agg import FigureCanvasAgg as FigureCanvas
     from matplotlib.figure import Figure
     from matplotlib.dates import DateFormatter
+    import matplotlib.pyplot as plt
+
+    start = datetime.datetime.strptime(start, "%Y-%m-%d-%H-%M")
+    end = datetime.datetime.strptime(end, "%Y-%m-%d-%H-%M")
+    min_ = float(min_)
+    max_ = float(max_)
+    refmin = float(refmin)
+    refmax = float(refmax)     
 
     patient = get_object_or_404(Patient, mrn = mrn)
     numericobservationtype = get_object_or_404(NumericObservationType, name = obs)
@@ -59,7 +67,14 @@ def g(request, mrn, obs, start, end, compass, height, width, min_, max_, refmin,
     x=[]
     y=[]
     nos = NumericObservation.objects.filter(patient = patient, observation_type = numericobservationtype)
-    ax.plot_date([no.datetime for no in nos], [no.value for no in nos], '-')
+    ax.plot_date([no.datetime for no in nos], [no.value for no in nos], '.')
+    ax.set_xlim( (start, end) )
+    ax.set_ylim( (min_, max_) )
+    ax.xaxis.set_ticks([start, end])
+    ax.yaxis.set_ticks([min_, refmin, refmax, max_])
+    ax.yaxis.set_ticks_position("both")
+    rect = plt.Rectangle((start, refmin), end, refmax - refmin, facecolor="#dddddd", edgecolor="white")
+    fig.gca().add_patch(rect)
     #ax.xaxis.set_major_formatter(DateFormatter('%Y-%m-%d'))
     #fig.autofmt_xdate()
     #fig.tight_layout(pad=0.5)
