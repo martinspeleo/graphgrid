@@ -1,3 +1,11 @@
+* {
+font-family: sans-serif;
+}
+
+body {
+	width: 620px;
+}
+
 table, th, td, tr
 {
 border: 0px;
@@ -7,4 +15,31 @@ margin: 0px;
 table, th, td, tr
 {
 border-collapse:collapse;
+}
+
+#date, #time {
+	color: gray;
+}
+#date, #time, #name, #dob, #mrn {
+	padding:0px 20px;
+	margin: 0px;
+}
+
+#time {
+	font-size: 200%;
+	font-weight: bold;
+}
+
+#date {
+	font-size: 75%;
+}
+
+#name {
+	font-size: 200%;
+	font-weight: bold;
+}
+
+#news {
+	float: right;
+	align: right;
 }

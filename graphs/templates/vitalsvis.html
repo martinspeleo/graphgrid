@@ -4,9 +4,12 @@
 {% endblock %}
 {% block title %} VitalsVis {% endblock %}
 {% block content %}
-<h1>Date: {{ datetimenow.day }}-{{ datetimenow.month }}-{{ datetimenow.year }} Time: {{ datetimenow.hour }}:{{ datetimenow.minute }}</h1>
-<h2>Name: {{ patient.first_name }} {{ patient.last_name }} </h2>
-<h3>DOB: {{ patient.dob }} MRN: {{ patient.mrn }}</h3>
+<header>
+<p id="news">EWS<br /><font size="7">#</font></p>
+<p><span id="time">{{ datetimenow.hour }}:{{ datetimenow.minute }}</span>
+<span id="date">{{ datetimenow.day }}/{{ datetimenow.month }}/{{ datetimenow.year }}</span></p>
+<p id="name">{{ patient.first_name }} {{ patient.last_name }}</p>
+<p><span id="dob">{{ patient.dob }}</span><span id="mrn">#{{ patient.mrn }}</span></p>
 <table>
 	<tr>
 		<td>
