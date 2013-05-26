@@ -11,6 +11,7 @@ urlpatterns = patterns('',
     url(r'^registerpatient$', 'patients.views.registerPatient', name='registerPatient'),
     url(r'^$', 'patients.views.patientObservation', name='patientObservation'),
     url(r'^getObs/([^/]*)/([^/]*)', 'patients.views.getObs', name='getObs'),
+    url(r'^graph/([^/]*)/([^/]*)/start([^/]*)/end([^/]*)/compass([^/]*)/height([^/]*)/width([^/]*)/min([^/]*)/max([^/]*)/refmin([^/]*)/refmax([^/]*)$', 'patients.views.g', name="g"),
 
     # Uncomment the admin/doc line below to enable admin documentation:
      url(r'^admin/doc/', include('django.contrib.admindocs.urls')),

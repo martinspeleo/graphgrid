@@ -2,7 +2,7 @@ Quick start instructions
 ========================
 
 Install required software (Ubuntu):
-    sudo apt-get install virtualenvwrapper sqlite3 git
+    sudo apt-get install virtualenvwrapper sqlite3 git python-dev gfortran
 
 Setup your git user details
     git config --global user.name "Your Name"
