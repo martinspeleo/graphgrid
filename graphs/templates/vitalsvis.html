@@ -19,8 +19,8 @@
 			<img src="{% url "g" mrn=patient.mrn obs="Respiratory Rate" start=datetimeoneday end=datetimezerodays compass="NE" height="90" width=width min_="-1" max_="40" refmin="12" refmax="20" %}"
 		</td>
 		<td>
-			RR
-			{{ recentRR }}
+			<span id="obslabel">RR</span>
+			<span id="obs">{{ recentRR }}</span>
 		</td>
 	</tr>
 	<tr>
@@ -31,7 +31,8 @@
 			<img src="{% url "g" mrn=patient.mrn obs="Oxygen Saturation" start=datetimeoneday end=datetimezerodays compass="E" height="90" width=width min_="80" max_="101" refmin="96" refmax="101" %}"
 		</td>
 		<td>
-			SpO<sub>2</sub>
+			<span id="obslabel">SpO<sub>2</sub></span>
+			<span id="obs">{{ recentRR }}%</span>
 		</td>
 	</tr>
 	<tr>
@@ -42,7 +43,8 @@
 			<img src="{% url "g" mrn=patient.mrn obs="Temperature" start=datetimeoneday end=datetimezerodays compass="E" height="90" width=width min_="33" max_="40" refmin="35" refmax="37.1" %}"
 		</td>
 		<td>
-			Temp
+			<span id="obslabel">Temp</span>
+			<span id="obs">{{ recentRR }}</span>
 		</td>
 	</tr>
 	<tr>
@@ -53,7 +55,8 @@
 			<img src="{% url "g" mrn=patient.mrn obs="bp" start=datetimeoneday end=datetimezerodays compass="E" height="90" width=width min_="40" max_="230" refmin="50" refmax="150" %}"
 		</td>
 		<td>
-			BP
+			<span id="obslabel">BP</span>
+			<span id="obs">{{ recentRR }}/{{ recentRR }}</span>
 		</td>
 	</tr>
 	<tr>
@@ -64,7 +67,8 @@
 			<img src="{% url "g" mrn=patient.mrn obs="Heart Rate" start=datetimeoneday end=datetimezerodays compass="SE" height="90" width=width min_="20" max_="180" refmin="50" refmax="100" %}"
 		</td>
 		<td>
-			HR
+			<span id="obslabel">HR</span>
+			<span id="obs">{{ recentRR }}</span>
 		</td>
 	</tr>	
 </table>

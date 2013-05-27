@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+{% load staticfiles %}
+
+{% block extra_headers %}
+<style>.observation_graph {height:180px; width:180px}</style>
+<!--[if lt IE 9]><script language="javascript" type="text/javascript" src="{% static "jqPlot/excanvas.js" %}"></script><![endif]-->
+<script language="javascript" type="text/javascript" src="{% static "jqPlot/jquery.min.js" %}"></script>
+<script language="javascript" type="text/javascript" src="{% static "jqPlot/jquery.jqplot.min.js" %}"></script>
+<link rel="stylesheet" type="text/css" href="{% static "jqPlot/jquery.jqplot.css" %}" />
+<script language="javascript">
+$(document).ready(function(){
+  var sineRenderer = function() {
+    var data = [[], []];
+    for (var i=0; i<13; i+=0.5) {
+      data[0].push([i, Math.sin(i)]);
+      data[1].push([i, Math.cos(i)]);
+    }
+    return data;
+  };
+  $('.observation_graph').each(
+      function(index, graph){
+        var g = $(graph);
+        var series =[];
+        g.children("span.observation_series").each(
+          function(i, s){series.push({color: $(s).attr("colour")});   
+                         }
+          );
+        g.jqplot([],{
+        dataRenderer: sineRenderer,
+        series: series
+        });  
+      }
+   );
+});
+</script>
+{% endblock %}
+
+{% block content %}
+{{ graphgrid }}
+<table>
+{% for row in graphgrid.grapharray %}
+ <tr>
+ {% for graph in row %}
+  <td>
+  <div class="observation_graph">
+  {% for series in graph.observationgraphseries_set.all %}
+   <span class="observation_series" colour="{{ series.colour }}">
+   </span>
+  {% endfor %}
+  </div>
+  </td>
+ {% endfor %}
+ </tr>
+ {% endfor %}
+</table>
+{% endblock %}
