@@ -60,7 +60,7 @@ def g(request, mrn, obs, start, end, compass, height, width, min_, max_, refmin,
     c = compass.lower()
     fig.subplots_adjust(left={True: 0.2, False:0}["w" in c], 
                         right={True: 0.9, False:1}["e" in c], 
-                        bottom={True: 0.1, False:0}["s" in c], 
+                        bottom={True: 0.2, False:0}["s" in c], 
                         top={True: 0.9, False:1}["n" in c])
     #ax.set_frame_on(False)
     x=[]
@@ -81,7 +81,12 @@ def g(request, mrn, obs, start, end, compass, height, width, min_, max_, refmin,
         numericobservationtype = get_object_or_404(NumericObservationType, name = obs)
         nos = NumericObservation.objects.filter(patient = patient, observation_type = numericobservationtype)
         ax.plot_date([no.datetime for no in nos], [no.value for no in nos], '.')
-    
+    startday = datetime.date(start.year, start.month, start.day)
+    for d in range(20):
+            #try:HACK
+                ax.plot_date([startday + datetime.timedelta(d), startday + datetime.timedelta(d)], [refmin, refmax], "y-")
+            #except:
+            #    pass
     ax.set_xlim( (start, end) )
     ax.set_ylim( (min_, max_) )
     ax.xaxis.set_ticks([start, end])

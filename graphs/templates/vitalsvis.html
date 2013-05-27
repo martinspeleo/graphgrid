@@ -13,10 +13,10 @@
 <table>
 	<tr>
 		<td>
-			<img src="{% url "g" mrn=patient.mrn obs="Respiratory Rate" start="2010-10-25-00-00" end="2010-10-30-00-00" compass="NW" height="90" width="310" min_="-1" max_="40" refmin="12" refmax="20" %}"
+			<img src="{% url "g" mrn=patient.mrn obs="Respiratory Rate" start=datetimefivedays end=datetimeoneday compass="NW" height="90" width=width min_="-1" max_="40" refmin="12" refmax="20" %}"
 		</td>
 		<td>
-			<img src="{% url "g" mrn=patient.mrn obs="Respiratory Rate" start="2010-10-30-00-00" end="2010-11-01-00-00" compass="NE" height="90" width="310" min_="-1" max_="40" refmin="12" refmax="20" %}"
+			<img src="{% url "g" mrn=patient.mrn obs="Respiratory Rate" start=datetimeoneday end=datetimezerodays compass="NE" height="90" width=width min_="-1" max_="40" refmin="12" refmax="20" %}"
 		</td>
 		<td>
 			RR
@@ -25,10 +25,10 @@
 	</tr>
 	<tr>
 	<td>
-			<img src="{% url "g" mrn=patient.mrn obs="Oxygen Saturation" start="2010-10-25-00-00" end="2010-10-30-00-00" compass="W" height="90" width="310" min_="80" max_="101" refmin="96" refmax="101" %}"
+			<img src="{% url "g" mrn=patient.mrn obs="Oxygen Saturation" start=datetimefivedays end=datetimeoneday compass="W" height="90" width=width min_="80" max_="101" refmin="96" refmax="101" %}"
 		</td>
 		<td>
-			<img src="{% url "g" mrn=patient.mrn obs="Oxygen Saturation" start="2010-10-30-00-00" end="2010-11-01-00-00" compass="E" height="90" width="310" min_="80" max_="101" refmin="96" refmax="101" %}"
+			<img src="{% url "g" mrn=patient.mrn obs="Oxygen Saturation" start=datetimeoneday end=datetimezerodays compass="E" height="90" width=width min_="80" max_="101" refmin="96" refmax="101" %}"
 		</td>
 		<td>
 			SpO<sub>2</sub>
@@ -36,10 +36,10 @@
 	</tr>
 	<tr>
 		<td>
-			<img src="{% url "g" mrn=patient.mrn obs="Temperature" start="2010-10-25-00-00" end="2010-10-30-00-00" compass="W" height="90" width="310" min_="33" max_="40" refmin="35" refmax="37.1" %}"
+			<img src="{% url "g" mrn=patient.mrn obs="Temperature" start=datetimefivedays end=datetimeoneday compass="W" height="90" width=width min_="33" max_="40" refmin="35" refmax="37.1" %}"
 		</td>
 		<td>
-			<img src="{% url "g" mrn=patient.mrn obs="Temperature" start="2010-10-30-00-00" end="2010-11-01-00-00" compass="E" height="90" width="310" min_="33" max_="40" refmin="35" refmax="37.1" %}"
+			<img src="{% url "g" mrn=patient.mrn obs="Temperature" start=datetimeoneday end=datetimezerodays compass="E" height="90" width=width min_="33" max_="40" refmin="35" refmax="37.1" %}"
 		</td>
 		<td>
 			Temp
@@ -47,10 +47,17 @@
 	</tr>
 	<tr>
 		<td>
+<<<<<<< HEAD
 			<img src="{% url "g" mrn=patient.mrn obs="bp" start="2010-10-25-00-00" end="2010-10-30-00-00" compass="W" height="150" width="310" min_="40" max_="230" refmin="50" refmax="150" %}"
 		</td>
 		<td>
 			<img src="{% url "g" mrn=patient.mrn obs="bp" start="2010-10-30-00-00" end="2010-11-01-00-00" compass="E" height="150" width="310" min_="40" max_="230" refmin="50" refmax="150" %}"
+=======
+			<img src="{% url "g" mrn=patient.mrn obs="bp" start=datetimefivedays end=datetimeoneday compass="W" height="90" width=width min_="40" max_="230" refmin="50" refmax="150" %}"
+		</td>
+		<td>
+			<img src="{% url "g" mrn=patient.mrn obs="bp" start=datetimeoneday end=datetimezerodays compass="E" height="90" width=width min_="40" max_="230" refmin="50" refmax="150" %}"
+>>>>>>> 69622f07e0626ab737051207391aaf36e22f2041
 		</td>
 		<td>
 			BP
@@ -58,10 +65,10 @@
 	</tr>
 	<tr>
 		<td>
-			<img src="{% url "g" mrn=patient.mrn obs="Heart Rate" start="2010-10-25-00-00" end="2010-10-30-00-00" compass="SW" height="90" width="310" min_="20" max_="180" refmin="50" refmax="100" %}"
+			<img src="{% url "g" mrn=patient.mrn obs="Heart Rate" start=datetimefivedays end=datetimeoneday compass="SW" height="90" width=width min_="20" max_="180" refmin="50" refmax="100" %}"
 		</td>
 		<td>
-			<img src="{% url "g" mrn=patient.mrn obs="Heart Rate" start="2010-10-30-00-00" end="2010-11-01-00-00" compass="SE" height="90" width="310" min_="20" max_="180" refmin="50" refmax="100" %}"
+			<img src="{% url "g" mrn=patient.mrn obs="Heart Rate" start=datetimeoneday end=datetimezerodays compass="SE" height="90" width=width min_="20" max_="180" refmin="50" refmax="100" %}"
 		</td>
 		<td>
 			HR
