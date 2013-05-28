@@ -2,7 +2,7 @@ from django.shortcuts import render, get_object_or_404
 from patients.models import Patient, NumericObservation
 from graphs.models import GraphGrid, imageGraph
 from django.http import HttpResponse
-from graphs.ews import *
+from graphs.ews import calculateEWS
 import datetime
 from PIL import Image, ImageDraw
 
