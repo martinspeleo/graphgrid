@@ -1,6 +1,17 @@
 * {
-font-family: sans-serif;
+font-family: 'QuicksandBold';
 }
+
+@font-face {
+    font-family: 'QuicksandBold';
+    src: url('Quicksand_Bold-webfont.eot');
+    src: url('Quicksand_Bold-webfont.eot?#iefix') format('embedded-opentype'),
+         url('Quicksand_Bold-webfont.woff') format('woff'),
+         url('Quicksand_Bold-webfont.ttf') format('truetype'),
+         url('Quicksand_Bold-webfont.svg#QuicksandBold') format('svg');
+    font-weight: normal;
+    font-style: normal;
+	}
 
 body {
 	width: 620px;
@@ -8,16 +19,16 @@ body {
 
 table, th, td, tr, img
 {
-border: 0px;
-padding: 0px;
-margin: 0px;
+	border: 0;
+	padding: 0;
+	margin: 0;
 }
 table, th, td, tr
 {
 border-collapse:collapse;
 }
 
-#date, #time {
+#date, #time, #obslabel {
 	color: gray;
 }
 #date, #time, #name, #dob, #mrn {
@@ -42,4 +53,15 @@ border-collapse:collapse;
 #news {
 	float: right;
 	align: right;
+}
+#obs, #obslabel {
+	padding: 0px 5px;
+	margin: 0px;
+}
+#obslabel {
+	font-size: 80%;
+}
+#obs {
+	font-weight: bold;
+	font-size: 125%;
 }

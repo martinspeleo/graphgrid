@@ -99,6 +99,7 @@ def drawTickLabel(draw, string, x, y, colour, **options):
 def vitalsVis(request, mrn):
     patient = get_object_or_404(Patient, mrn = mrn)
     datetimenow = datetime.datetime(2010,11,01) 
+    #datetimenow = datetime.datetime.now() 
     datetimeoneday = datetime.datetime.strftime(datetimenow - datetime.timedelta(1), dateformat)
     datetimefivedays = datetime.datetime.strftime(datetimenow - datetime.timedelta(5), dateformat)
     datetimezerodays = datetime.datetime.strftime(datetimenow, dateformat)
@@ -109,4 +110,4 @@ def vitalsVis(request, mrn):
     except:
         recentRR = "-"
 	
-    return render(request, 'vitalsvis.html', {'patient': patient, 'datenow': datenow, 'timenow': timenow, 'datetimeoneday': datetimeoneday, 'datetimefivedays': datetimefivedays, 'datetimezerodays': datetimezerodays, 'recentRR': recentRR, 'width': 300})
+    return render(request, 'vitalsvis.html', {'patient': patient, 'datenow': datenow, 'timenow': timenow, 'datetimeoneday': datetimeoneday, 'datetimefivedays': datetimefivedays, 'datetimezerodays': datetimezerodays, 'recentRR': recentRR, 'width': 300, 'height': 90, 'bpheight': 150})
