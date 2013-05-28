@@ -12,7 +12,8 @@ urlpatterns = patterns('',
     url(r'^$', 'patients.views.patientObservation', name='patientObservation'),
     url(r'^getObs/([^/]*)/([^/]*)', 'patients.views.getObs', name='getObs'),
     url(r'^graph/(?P<mrn>[^/]*)/(?P<obs>[^/]*)/start(?P<start>[^/]*)/end(?P<end>[^/]*)/compass(?P<compass>[^/]*)/height(?P<height>[^/]*)/width(?P<width>[^/]*)/min(?P<min_>[^/]*)/max(?P<max_>[^/]*)/refmin(?P<refmin>[^/]*)/refmax(?P<refmax>[^/]*)$', 'patients.views.g', name="g"),
-	url(r'^getVis/([^/]*)', 'graphs.views.vitalsVis', name='vitalsVis'),
+    url(r'^getVis/([^/]*)', 'graphs.views.vitalsVis', name='vitalsVis'),
+    url(r'^imageGraph/([^/]*)/([^/]*)', 'graphs.views.image_graph', name='image_graph'),
     # Uncomment the admin/doc line below to enable admin documentation:
      url(r'^admin/doc/', include('django.contrib.admindocs.urls')),
 
