@@ -25,7 +25,10 @@ table, th, td, tr
 {
 	border-collapse: collapse;
 }
-
+#graphcontainer
+{
+	float: left
+}
 #date, #time, #obslabel, #obsunits , #fraction{
 	color: gray;
 }
