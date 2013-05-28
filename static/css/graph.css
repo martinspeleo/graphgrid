@@ -42,16 +42,16 @@ border-collapse:collapse;
 	font-size: 500%
 }
 #EWSRed{
-	color: red;
+	color: #E67857;
 }
 #EWSAmber{
-	color: orange;
+	color: #F6C17D;
 }
 #EWSGreen{
-	color: green;
+	color: #C2DEB6;
 }
 #EWSBlue{
-	color: blue;
+	color: #CCCCCC;
 }
 #time {
 	font-size: 200%;

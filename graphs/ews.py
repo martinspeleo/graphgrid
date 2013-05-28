@@ -88,12 +88,11 @@ def calculateEWS(RR, SpO2, Temp, SBP, HR, ConciousLevel, SupO2):
         supO2EWS = 2
     else:
         supO2EWS = 0
-    EWSObs = [RREWS, SpO2EWS, tempEWS, SBPEWS, HREWS, conciousLevelEWS, supO2EWS]
-    for EWSRed in EWSObs:
-        if (EWSRed == 3):
-            EWSRedScore = 1
-        else:
-            EWSRedScore = 0
+    EWSObs = [int(RREWS), int(SpO2EWS), int(tempEWS), int(SBPEWS), int(HREWS), int(conciousLevelEWS), int(supO2EWS)]
+    if 3 in EWSObs:
+        EWSRedScore = 1
+    else:
+        EWSRedScore = 0
     EWS = RREWS + SpO2EWS + tempEWS + SBPEWS + HREWS + conciousLevelEWS + supO2EWS
     return {'EWS': EWS, 'EWSRedScore': EWSRedScore}
 def chooseEWSColour(EWS, EWSRedScore):
