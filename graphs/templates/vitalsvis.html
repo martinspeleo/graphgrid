@@ -16,7 +16,7 @@
 		<td><img src="{% url "g" mrn=patient.mrn obs="Respiratory Rate" start=datetimeoneday end=datetimezerodays compass="NE" height=height width=width min_="-1" max_="40" refmin="12" refmax="20" %}" height={{ height }} width={{ width }}></td>
 		<td>
 			<span id="obslabel">RR</span>
-			<div id="obs">{{ recentRR }}</div>
+			<div id="obs">{{ recentRR }}</div><div id= "obsunits">min<sup>-1</sup></div>
 		</td>
 	</tr>
 	<tr>
@@ -48,9 +48,8 @@
 		<td><img src="{% url "g" mrn=patient.mrn obs="Heart Rate" start=datetimeoneday end=datetimezerodays compass="SE" height=height width=width min_="20" max_="180" refmin="50" refmax="100" %}" height={{ height }} width={{ width }}></td>
 		<td>
 			<span id="obslabel">HR</span>
-			<div id="obs">{{ recentHR }}</div>
+			<div id="obs">{{ recentHR }}</div><div id= "obsunits">min<sup>-1</sup></div>
 		</td>
 	</tr>	
 </table>
-	
 {% endblock %}
