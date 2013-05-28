@@ -12,10 +12,9 @@ dateformat = "%Y-%m-%d-%H-%M"
 
 SCALE = 4
 DOTSIZE = 1
-print join(settings.FONTS_DIR, "Quicksand_Bold.otf")
-SMALLFONT = ImageFont.truetype(join(settings.FONTS_DIR, "Quicksand_Bold.otf"), 9 * SCALE)
-MEDIUMFONT = ImageFont.truetype(join(settings.FONTS_DIR, "Quicksand_Bold.otf"), 12 * SCALE)
-LARGEFONT = ImageFont.truetype(join(settings.FONTS_DIR, "Quicksand_Bold.otf"), 15 * SCALE)
+SMALLFONT = ImageFont.truetype(join(settings.FONTS_DIR, "Comfortaa_Bold.ttf"), 9 * SCALE)
+MEDIUMFONT = ImageFont.truetype(join(settings.FONTS_DIR, "Comfortaa_Bold.ttf"), 12 * SCALE)
+LARGEFONT = ImageFont.truetype(join(settings.FONTS_DIR, "Comfortaa_Bold.ttf"), 15 * SCALE)
 
 def home(request):
     graphgrids = GraphGrid.objects.all()
