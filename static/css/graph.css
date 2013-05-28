@@ -16,7 +16,10 @@ font-family: 'QuicksandBold';
 body {
 	width: 620px;
 }
-
+p, td
+{
+	white-space: nowrap
+}
 table, th, td, tr, img
 {
 	border: 0;
@@ -28,14 +31,16 @@ table, th, td, tr
 border-collapse:collapse;
 }
 
-#date, #time, #obslabel {
+#date, #time, #obslabel, #obsunits , #fraction{
 	color: gray;
 }
 #date, #time, #name, #dob, #mrn {
 	padding:0px 20px;
 	margin: 0px;
 }
-
+#EWS{
+	font-size: 400%
+}
 #time {
 	font-size: 200%;
 	font-weight: bold;
@@ -54,11 +59,19 @@ border-collapse:collapse;
 	float: right;
 	align: right;
 }
-#obs, #obslabel {
+#fraction {
+	padding: 0px;
+}
+#obs, #obslabel, #obsunits, #fraction {
 	padding: 0px 5px;
 	margin: 0px;
+	white-space: nowrap;
 }
-#obslabel {
+#obslabel
+{
+	font-weight: bold;
+}
+#obslabel, #obsunits {
 	font-size: 80%;
 }
 #obs {

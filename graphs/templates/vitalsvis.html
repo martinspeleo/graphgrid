@@ -2,10 +2,10 @@
 {% load staticfiles %}
 {% block extra_headers %}<link href="{% static "css/graph.css" %}" rel="stylesheet" type="text/css" />
 {% endblock %}
-{% block title %} VitalsVis {% endblock %}
+{% block title %} VitalVis {% endblock %}
 {% block content %}
 <header>
-<p id="news">EWS<br /><font size="7">#</font></p>
+<p id="news">EWS<br /><span id = EWS>{{ recentEWS }}</span></p>
 <p><span id="time">{{ timenow }}</span>
 <span id="date">{{ datenow }}</span></p>
 <p id="name">{{ patient.first_name }} {{ patient.last_name }}</p>
@@ -24,7 +24,7 @@
 		<td><img src="{% url "g" mrn=patient.mrn obs="Oxygen Saturation" start=datetimeoneday end=datetimezerodays compass="E" height=height width=width min_="80" max_="101" refmin="96" refmax="101" %}" height={{ height }} width={{ width }}></td>
 		<td>
 			<span id="obslabel">SpO<sub>2</sub></span>
-			<div id="obs">{{ recentRR }}%</div>
+			<p><div id="obs">{{ recentSpO2 }}</div><div id= "obsunits">%</div></p>
 		</td>
 	</tr>
 	<tr>
@@ -32,7 +32,7 @@
 		<td><img src="{% url "g" mrn=patient.mrn obs="Temperature" start=datetimeoneday end=datetimezerodays compass="E" height=height width=width min_="33" max_="40" refmin="35" refmax="37.1" %}" height={{ height }} width={{ width }}></td>
 		<td>
 			<span id="obslabel">Temp</span>
-			<div id="obs">{{ recentRR }}</div>
+			<div id="obs">{{ recentTemp }}</div><div id="obsunits">°C</div>
 		</td>
 	</tr>
 	<tr>
@@ -40,7 +40,7 @@
 		<td><img src="{% url "g" mrn=patient.mrn obs="bp" start=datetimeoneday end=datetimezerodays compass="E" height=bpheight width=width min_="40" max_="230" refmin="50" refmax="150" %}" height={{ bpheight }} width={{ width }}></td>
 		<td>
 			<span id="obslabel">BP</span>
-			<div id="obs">{{ recentRR }}<div id="fraction"><br />&mdash;<br /></div>{{ recentRR }}</div>
+			<div id="obs">{{ recentSBP }}</div><div id="fraction">&mdash;<br /></div><div id="obs">{{ recentDBP }}</div><div id="obsunits">mmHg</div>
 		</td>
 	</tr>
 	<tr>
@@ -48,7 +48,7 @@
 		<td><img src="{% url "g" mrn=patient.mrn obs="Heart Rate" start=datetimeoneday end=datetimezerodays compass="SE" height=height width=width min_="20" max_="180" refmin="50" refmax="100" %}" height={{ height }} width={{ width }}></td>
 		<td>
 			<span id="obslabel">HR</span>
-			<div id="obs">{{ recentRR }}</div>
+			<div id="obs">{{ recentHR }}</div>
 		</td>
 	</tr>	
 </table>
