@@ -38,7 +38,9 @@ border-collapse:collapse;
 	padding:0px 20px;
 	margin: 0px;
 }
-
+#EWS{
+	font-size: 400%
+}
 #time {
 	font-size: 200%;
 	font-weight: bold;
