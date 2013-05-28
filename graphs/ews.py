@@ -1,4 +1,7 @@
 def calculateEWS(RR, SpO2, Temp, SBP, HR, ConciousLevel, SupO2):
+#this function firstly makes sure the values are integers (or a float, in the case of Temperature, then, using the values from the 
+#NEWS system - http://www.rcplondon.ac.uk/sites/default/files/documents/national-early-warning-score-standardising-assessment-acute-illness-severity-nhs.pdf 
+#returns a NEWS score + whether it triggers the "RED score" (IE, individual parameter = 3)
     try:
         intRR = int(RR)
     except:
@@ -47,7 +50,7 @@ def calculateEWS(RR, SpO2, Temp, SBP, HR, ConciousLevel, SupO2):
                 SpO2EWS = 1
             else:
                 SpO2EWS = 0
-    if (35.0 >= flTemp)
+    if (35.0 >= flTemp):
         tempEWS = 3
     else:
         if (39.1 <= flTemp):
@@ -57,10 +60,10 @@ def calculateEWS(RR, SpO2, Temp, SBP, HR, ConciousLevel, SupO2):
                 tempEWS = 1
             else:
                 tempEWS = 0
-    if (90 >= intSBP >= 220)
+    if (90 >= intSBP >= 220):
         SBPEWS = 3
     else:
-        if (100 >= intSBP)
+        if (100 >= intSBP):
             SBPEWS = 2
         else:
             if (110 >= intSBP):
@@ -85,5 +88,11 @@ def calculateEWS(RR, SpO2, Temp, SBP, HR, ConciousLevel, SupO2):
         supO2EWS = 2
     else:
         supO2EWS = 0
+    EWSObs = [RREWS, SpO2EWS, tempEWS, SBPEWS, HREWS, conciousLevelEWS, supO2EWS]
+    for EWSRed in EWSObs:
+        if (EWSRed == 3):
+            EWSRedScore = 1
+        else:
+            EWSRedScore = 0
     EWS = RREWS + SpO2EWS + tempEWS + SBPEWS + HREWS + conciousLevelEWS + supO2EWS
-    return EWS
+    return {'EWS': EWS, 'EWSRedScore': EWSRedScore}

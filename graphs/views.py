@@ -51,7 +51,8 @@ def vitalsVis(request, mrn):
         recentHR = "-"
 	#calculate EWS
     try: 
-        recentEWS = calculateEWS( recentRR, recentSpO2, recentTemp, recentSBP, recentHR, 0, 0)
+        recentEWSCalc = calculateEWS( recentRR, recentSpO2, recentTemp, recentSBP, recentHR, 0, 0)
+        recentEWS = recentEWSCalc['EWS']
     except:
         recentEWS = "-"
     #Return patient, date and observation details
