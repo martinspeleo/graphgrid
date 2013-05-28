@@ -19,22 +19,14 @@ body {
 
 table, th, td, tr, img
 {
-border: 0px;
-padding: 0px;
-margin: 0px;
+	border: 0;
+	padding: 0;
+	margin: 0;
 }
 table, th, td, tr
 {
 border-collapse:collapse;
 }
-ul {
-	display: table; 
-}
-li {
-	display: table-cell; 
-	text-align: center; 
-	border: 0px; 
-	}
 
 #date, #time, #obslabel {
 	color: gray;
