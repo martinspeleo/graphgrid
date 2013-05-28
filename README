@@ -13,10 +13,6 @@ Clone the repository:
 
 Configure virtualenv by following instructions in /etc/bash_completion.d/virtualenvwrapper
 
-Aggdraw fails to compile in the mkvirtual enviroment step, unless the following is executed first.  However it might be advantaguos not ot do this in the first instance, such that freetype can be compiled in.
-     export CFLAGS="-fpermissive"
-
-
 Create a virtual environment:
     mkvirtualenv -r requirements graphgrid
 
