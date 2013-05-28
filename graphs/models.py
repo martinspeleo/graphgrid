@@ -49,6 +49,8 @@ class imageGraph(models.Model):
     bottom_border = models.FloatField()
     now_axis = models.BooleanField()
     linethickness = models.FloatField()
+    def __unicode__(self):
+        return self.name
 
 class imageGraphTimeSeries(models.Model):
     image_graph = models.ForeignKey("imageGraph")
@@ -77,6 +79,8 @@ class imageGraphSeries(models.Model):
     
     def get_pos(self, v):
         return self.lower_pixel + (self.upper_pixel - self.lower_pixel) * (v - self.lower_value) / (self.upper_value - self.lower_value)
+    def __unicode__(self):
+        return "%s: %s" % (self.observation_type, self.label)
 
 class imageGraphSeriesLine(models.Model):
     image_graph_series = models.ForeignKey("imageGraphSeries")
