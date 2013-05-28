@@ -2,7 +2,7 @@ from django.shortcuts import render, get_object_or_404
 from patients.models import Patient, NumericObservation
 from graphs.models import GraphGrid, imageGraph
 from django.http import HttpResponse
-from graphs.ews import calculateEWS
+from graphs.ews import calculateEWS, chooseEWSColour
 import datetime
 from PIL import Image, ImageDraw
 
@@ -134,9 +134,14 @@ def vitalsVis(request, mrn):
         recentHR = "-"
 	#calculate EWS
     try: 
-        recentEWSCalc = calculateEWS( recentRR, recentSpO2, recentTemp, recentSBP, recentHR, 0, 0)
+        recentEWSCalc = calculateEWS( recentRR, recentSpO2, recentTemp, recentSBP, recentHR, 0, 0 )
         recentEWS = recentEWSCalc['EWS']
     except:
         recentEWS = "-"
+    #choose a colour for the EWS
+    try:
+        EWSColour = chooseEWSColour( recentEWSCalc['EWS'], recentEWSCalc['EWSRedScore'] )
+    except: 
+        EWSColour = "EWSBlue"
     #Return patient, date and observation details
-    return render(request, 'vitalsvis.html', {'patient': patient, 'datenow': datenow, 'timenow': timenow, 'datetimeoneday': datetimeoneday, 'datetimefivedays': datetimefivedays, 'datetimezerodays': datetimezerodays, 'recentRR': recentRR, 'recentSpO2': recentSpO2, 'recentTemp': recentTemp, 'recentSBP': recentSBP, 'recentDBP': recentDBP, 'recentHR': recentHR, 'recentEWS': recentEWS, 'width': 290, 'height': 90, 'bpheight': 150})
+    return render(request, 'vitalsvis.html', {'patient': patient, 'datenow': datenow, 'timenow': timenow, 'datetimeoneday': datetimeoneday, 'datetimefivedays': datetimefivedays, 'datetimezerodays': datetimezerodays, 'recentRR': recentRR, 'recentSpO2': recentSpO2, 'recentTemp': recentTemp, 'recentSBP': recentSBP, 'recentDBP': recentDBP, 'recentHR': recentHR, 'recentEWS': recentEWS, 'EWSColour': EWSColour, 'width': 290, 'height': 90, 'bpheight': 150})

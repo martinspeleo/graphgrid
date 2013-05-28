@@ -96,3 +96,27 @@ def calculateEWS(RR, SpO2, Temp, SBP, HR, ConciousLevel, SupO2):
             EWSRedScore = 0
     EWS = RREWS + SpO2EWS + tempEWS + SBPEWS + HREWS + conciousLevelEWS + supO2EWS
     return {'EWS': EWS, 'EWSRedScore': EWSRedScore}
+def chooseEWSColour(EWS, EWSRedScore):
+    try: 
+        intEWS = int(EWS)
+    except:
+        intEWS = 0
+    try:
+        intEWSRedScore = int(EWSRedScore)
+    except:
+        intEWSRedScore = 0
+    if (intEWS >= 7):
+        colour = "EWSRed"
+    else:
+        if (intEWS >=5):
+            colour = "EWSAmber"
+        else:
+            if (intEWSRedScore == 1):
+                colour = "EWSAmber"
+            else:
+                if (intEWS >=1):
+                    colour = "EWSGreen"
+                else:
+                    colour = "EWSBlue"
+    return colour
+    

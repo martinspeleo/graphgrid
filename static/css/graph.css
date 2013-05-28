@@ -38,8 +38,20 @@ border-collapse:collapse;
 	padding:0px 20px;
 	margin: 0px;
 }
-#EWS{
-	font-size: 400%
+#EWSRed, #EWSAmber, #EWSGreen, #EWSBlue{
+	font-size: 500%
+}
+#EWSRed{
+	color: red;
+}
+#EWSAmber{
+	color: orange;
+}
+#EWSGreen{
+	color: green;
+}
+#EWSBlue{
+	color: blue;
 }
 #time {
 	font-size: 200%;
