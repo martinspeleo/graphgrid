@@ -12,10 +12,9 @@ dateformat = "%Y-%m-%d-%H-%M"
 
 SCALE = 4
 DOTSIZE = 1
-print join(settings.FONTS_DIR, "Quicksand_Bold.otf")
-SMALLFONT = ImageFont.truetype(join(settings.FONTS_DIR, "Quicksand_Bold.otf"), 9 * SCALE)
-MEDIUMFONT = ImageFont.truetype(join(settings.FONTS_DIR, "Quicksand_Bold.otf"), 12 * SCALE)
-LARGEFONT = ImageFont.truetype(join(settings.FONTS_DIR, "Quicksand_Bold.otf"), 15 * SCALE)
+SMALLFONT = ImageFont.truetype(join(settings.FONTS_DIR, "Nunito-Bold.ttf"), 8 * SCALE)
+MEDIUMFONT = ImageFont.truetype(join(settings.FONTS_DIR, "Nunito-Bold.ttf"), 12 * SCALE)
+LARGEFONT = ImageFont.truetype(join(settings.FONTS_DIR, "Nunito-Bold.ttf"), 15 * SCALE)
 
 def home(request):
     graphgrids = GraphGrid.objects.all()
@@ -57,12 +56,12 @@ def image_graph(request, mrn, graph_name):
         try: 
            v = str(NumericObservation.objects.filter(patient = patient, 
                                                      observation_type = ls.observation_type, 
-                                                     datetime__lt = datetimenow)[0].value) + ls.observation_type.units
+                                                     datetime__lt = datetimenow)[0].value)
         except :
-           v = "(%s)" % ls.observation_type.units
+           v = "-"
         
-        drawlabel(draw, (rb, (ls.upper_pixel + ls.lower_pixel) * SCALE / 2 - sizeY / 2), " " + ls.label, ls.label_colour)
-        draw.text((rb, (ls.upper_pixel + ls.lower_pixel) * SCALE / 2 + sizeY / 2), " " + v, fill="black", font = LARGEFONT)
+        drawLabel(draw, (rb, (ls.upper_pixel + ls.lower_pixel) * SCALE / 2 - sizeY / 2), " " + ls.label, ls.label_colour)
+        drawValue(draw, (rb, (ls.upper_pixel + ls.lower_pixel) * SCALE / 2 + sizeY / 2), v, ls.observation_type.units, ls.label_colour)
     if imagegraph.now_axis:
          draw.line((rb, tb, rb, bb), 
               width = int(imagegraph.linethickness),
@@ -96,12 +95,36 @@ def image_graph(request, mrn, graph_name):
                                           l.label_colour, 
                                           **options)
         for ls in graph_series:
+          if ls.other_observation_type:
+            p = [(trb - ts.get_pixels(enddatetime - n.datetime.replace(tzinfo=None)) * SCALE, ls.get_pos(n.value) * SCALE) 
+                 for n in NumericObservation.objects.filter(patient = patient, 
+                                                       observation_type = ls.observation_type, 
+                                                       datetime__lt = enddatetime, 
+                                                       datetime__gt = startdatetime).order_by("datetime")]
+            o = [(trb - ts.get_pixels(enddatetime - n.datetime.replace(tzinfo=None)) * SCALE, ls.get_pos(n.value) * SCALE)
+                 for n in NumericObservation.objects.filter(patient = patient, 
+                                                       observation_type = ls.other_observation_type, 
+                                                       datetime__lt = enddatetime, 
+                                                       datetime__gt = startdatetime).order_by("datetime")]
+            while bool(p) or bool(o):
+                if p and o and p[0][0] == o[0][0]:
+                  tp, yp = p.pop(0)
+                  to, yo = o.pop(0)
+                  draw.line((to, yo, tp, yp), 
+                       width = int(imagegraph.linethickness * SCALE),
+                       fill = ls.line_colour)  
+                elif p and (not o or p[0][0] < o[0][0]):
+                  tp, yp = p.pop(0)
+                  draw.ellipse((tp - DOTSIZE * SCALE, yp - DOTSIZE * SCALE, tp + DOTSIZE * SCALE, yp + DOTSIZE * SCALE), ls.line_colour)
+                else:
+                  to, yo = o.pop(0)
+                  draw.ellipse((to - DOTSIZE * SCALE, yo - DOTSIZE * SCALE, to + DOTSIZE * SCALE, yo + DOTSIZE * SCALE), ls.line_colour)
+          else:
             for n in NumericObservation.objects.filter(patient = patient, 
                                                        observation_type = ls.observation_type, 
                                                        datetime__lt = enddatetime, 
                                                        datetime__gt = startdatetime
                                                        ):
-                print ls.observation_type, n.datetime, n.value
                 t = trb - ts.get_pixels(enddatetime - n.datetime.replace(tzinfo=None)) * SCALE
                 y = ls.get_pos(n.value) * SCALE
                 draw.ellipse((t - DOTSIZE * SCALE, y - DOTSIZE * SCALE, t + DOTSIZE * SCALE, y + DOTSIZE * SCALE), ls.line_colour)
@@ -111,7 +134,7 @@ def image_graph(request, mrn, graph_name):
               imagegraph.height), Image.ANTIALIAS).save(response, "PNG")
     return response
 
-def drawlabel(draw, (x, y), label, colour):
+def drawLabel(draw, (x, y), label, colour):
     labels = label.split("__")
     x = x
     small = False # This probably needs fixing
@@ -129,6 +152,12 @@ def drawTickLabel(draw, string, x, y, colour, **options):
                         y = y - sizeY / 2
                         draw.rectangle((x - 1, y - 1, x + sizeX, y + sizeY), fill = "white")
                         draw.text((x, y), string, fill=colour, **options)
+
+def drawValue(draw, (x, y), value, units, colour):
+    sizeX, sizeY = draw.textsize(" " + value, font = LARGEFONT)
+    draw.text((x, y), " " + value, fill="black", font = LARGEFONT)
+    sizeunitsX, sizeunitsY = draw.textsize(value, font = SMALLFONT) 
+    draw.text((x + sizeX, y + sizeY - sizeunitsY), units, fill=colour, font = SMALLFONT)
 
 def vitalsVis(request, mrn):
     patient = get_object_or_404(Patient, mrn = mrn)

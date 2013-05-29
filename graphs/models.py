@@ -60,6 +60,7 @@ class imageGraphTimeSeries(models.Model):
     minor_tick_spacing = models.FloatField(null = True, blank = True)
     order = models.IntegerField()
     left_axis = models.BooleanField()
+    label = models.CharField(max_length=30, null = True, blank = True)
     #class Meta: 
     #    orderby = "order"
     def get_pixels(self, dt):
@@ -70,6 +71,7 @@ class imageGraphSeries(models.Model):
     label_colour = RGBColorField()
     line_colour = RGBColorField()
     observation_type = models.ForeignKey("patients.NumericObservationType")
+    other_observation_type = models.ForeignKey("patients.NumericObservationType", null = True, blank = True, related_name = "imagegraphseriesother")
     lower_value = models.FloatField()
     lower_pixel = models.FloatField()
     upper_value = models.FloatField()
