@@ -61,10 +61,10 @@ class imageGraphTimeSeries(models.Model):
     order = models.IntegerField()
     left_axis = models.BooleanField()
     label = models.CharField(max_length=30, null = True, blank = True)
-    #class Meta: 
-    #    orderby = "order"
+    class Meta: 
+        ordering = ["order"]
     def get_pixels(self, dt):
-        return self.width * (self.time_period_days - dt.total_seconds() / 86400. ) / self.time_period_days
+        return self.width * (dt.total_seconds() / 86400. ) / self.time_period_days
 
 class imageGraphSeries(models.Model):
     image_graph = models.ForeignKey("imageGraph")
@@ -73,14 +73,17 @@ class imageGraphSeries(models.Model):
     observation_type = models.ForeignKey("patients.NumericObservationType")
     other_observation_type = models.ForeignKey("patients.NumericObservationType", null = True, blank = True, related_name = "imagegraphseriesother")
     lower_value = models.FloatField()
-    lower_pixel = models.FloatField()
+    pixel_height = models.FloatField()
+    order = models.IntegerField()
+    decimal_places = models.IntegerField()
     upper_value = models.FloatField()
-    upper_pixel = models.FloatField()
     label = models.CharField(max_length=200)
     latest_value = models.BooleanField()
+    class Meta:
+        ordering = ['order']
     
     def get_pos(self, v):
-        return self.lower_pixel + (self.upper_pixel - self.lower_pixel) * (v - self.lower_value) / (self.upper_value - self.lower_value)
+        return self.pixel_height * (v - self.lower_value) / (self.upper_value - self.lower_value)
     def __unicode__(self):
         return "%s: %s" % (self.observation_type, self.label)
 

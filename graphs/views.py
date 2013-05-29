@@ -11,7 +11,7 @@ from os.path import join
 dateformat = "%Y-%m-%d-%H-%M"
 
 SCALE = 4
-DOTSIZE = 1
+DOTSIZE = 1.5
 SMALLFONT = ImageFont.truetype(join(settings.FONTS_DIR, "Nunito-Bold.ttf"), 8 * SCALE)
 MEDIUMFONT = ImageFont.truetype(join(settings.FONTS_DIR, "Nunito-Bold.ttf"), 12 * SCALE)
 LARGEFONT = ImageFont.truetype(join(settings.FONTS_DIR, "Nunito-Bold.ttf"), 15 * SCALE)
@@ -26,7 +26,7 @@ def graphgrid(request, graphgrid):
 
 def image_graph(request, mrn, graph_name):
 
-    datetimenow = datetime.datetime(2010,11,01, 7, 0)
+    datetimenow = datetime.datetime(2010,11, 1, 0, 59)
     patient = get_object_or_404(Patient, mrn = mrn)
     imagegraph = get_object_or_404(imageGraph, name = graph_name)
     i = Image.new("RGB", 
@@ -34,41 +34,18 @@ def image_graph(request, mrn, graph_name):
                    imagegraph.height * SCALE), 
                   "white")
     draw = ImageDraw.Draw(i)
-    #Right Border
+    
+    #Find borders
     lb = imagegraph.left_border * SCALE
     rb = (imagegraph.width - imagegraph.right_border) * SCALE
     tb = imagegraph.top_border * SCALE
     bb = (imagegraph.height - imagegraph.bottom_border) * SCALE
+    
+    #Get Series
     time_series = imagegraph.imagegraphtimeseries_set.all()
     graph_series = imagegraph.imagegraphseries_set.all()
-    for ls in graph_series:
-        for l in ls.imagegraphseriesline_set.all():
-            pixel = ls.get_pos(l.value) * SCALE
-            if l.linethickness:
-                draw.line((lb, pixel, rb, pixel), 
-                       width = int(imagegraph.linethickness * SCALE),
-                       fill = l.line_colour)
-            if l.othervalue:
-                otherpixel = ls.get_pos(l.othervalue) * SCALE 
-                draw.rectangle((lb, pixel, rb, otherpixel), 
-                       fill = l.line_colour)
-        sizeX, sizeY = draw.textsize(" " + ls.label, font = MEDIUMFONT)
-        try: 
-           v = str(NumericObservation.objects.filter(patient = patient, 
-                                                     observation_type = ls.observation_type, 
-                                                     datetime__lt = datetimenow)[0].value)
-        except :
-           v = "-"
-        
-        drawLabel(draw, (rb, (ls.upper_pixel + ls.lower_pixel) * SCALE / 2 - sizeY / 2), " " + ls.label, ls.label_colour)
-        drawValue(draw, (rb, (ls.upper_pixel + ls.lower_pixel) * SCALE / 2 + sizeY / 2), v, ls.observation_type.units, ls.label_colour)
-    if imagegraph.now_axis:
-         draw.line((rb, tb, rb, bb), 
-              width = int(imagegraph.linethickness),
-              fill = "black")
-         nowstring = datetimenow.strftime("%Y-%m-%d %H:%M")
-         sizeX, sizeY = draw.textsize(nowstring, font = MEDIUMFONT)
-         draw.text((rb - sizeX / 2, tb - sizeY), nowstring, fill="#bbbbbb", font = MEDIUMFONT)
+    
+    #Draw day lines
     startdatetime = datetimenow
     tlb = rb
     for ts in time_series:
@@ -78,41 +55,109 @@ def image_graph(request, mrn, graph_name):
         tlb = tlb - ts.width * SCALE
         previousmidnight = datetime.datetime(enddatetime.year, enddatetime.month, enddatetime.day)
         while previousmidnight > startdatetime:
-            print previousmidnight, startdatetime
             xpos = trb - ts.get_pixels(enddatetime - previousmidnight) * SCALE
             draw.line((xpos, tb, xpos, bb), width = SCALE, fill="#dddddd")
             previousmidnight = previousmidnight - datetime.timedelta(1)
+
+    #Draw Series Lines and Labels
+    slb = tb
+    for ls in graph_series:
+        stb = slb
+        slb = stb + ls.pixel_height * SCALE
+        for l in ls.imagegraphseriesline_set.all():
+            pixel = slb - ls.get_pos(l.value) * SCALE
+            if l.linethickness:
+                draw.line((lb, pixel, rb, pixel), 
+                       width = int(imagegraph.linethickness * SCALE),
+                       fill = l.line_colour)
+            if l.othervalue:
+                otherpixel = slb - ls.get_pos(l.othervalue) * SCALE 
+                draw.rectangle((lb, pixel, rb, otherpixel), 
+                       fill = l.line_colour)
+        try: 
+           v = ("%%0.%df" % ls.decimal_places) % NumericObservation.objects.filter(
+                                                     patient = patient, 
+                                                     observation_type = ls.observation_type, 
+                                                     datetime__lt = datetimenow).order_by("-datetime")[0].value
+        except :
+           v = "-"
+
+        labelSizeX, labelSizeY = draw.textsize(" " + ls.label, font = MEDIUMFONT)
+        valueSizeX, valueSizeY = draw.textsize(" " + v, font = LARGEFONT)    
+        centralY = stb + ls.pixel_height * SCALE / 2    
+        if ls.other_observation_type:
+            try: 
+               ov = ("%%0.%df" % ls.decimal_places) % NumericObservation.objects.filter(
+                                                          patient = patient, 
+                                                          observation_type = ls.other_observation_type, 
+                                                          datetime__lt = datetimenow).order_by("-datetime")[0].value
+            except :
+               ov = "-"
+            spaceSizeX, spaceSizeY = draw.textsize(" ", font = LARGEFONT)  
+            drawLabel(draw, (rb, centralY - labelSizeY - valueSizeY / 2), " " + ls.label, ls.label_colour)
+            drawValue(draw, (rb, centralY - valueSizeY / 2), v, "", ls.label_colour, imagegraph.right_border * SCALE)
+            draw.line((rb + spaceSizeX, centralY + valueSizeY / 2, rb + valueSizeX, centralY + valueSizeY / 2), width = SCALE, fill="#dddddd")
+            drawValue(draw, (rb, centralY + valueSizeY / 2), ov, ls.observation_type.units, ls.label_colour, imagegraph.right_border * SCALE)
+        else:
+            drawLabel(draw, (rb, centralY - labelSizeY), " " + ls.label, ls.label_colour)
+            drawValue(draw, (rb, centralY), v, ls.observation_type.units, ls.label_colour, imagegraph.right_border * SCALE)
+    #Draw Line representing current time
+    if imagegraph.now_axis:
+         draw.line((rb, tb, rb, bb), 
+              width = int(imagegraph.linethickness),
+              fill = "black")
+         nowstring = datetimenow.strftime("%Y-%m-%d %H:%M")
+         sizeX, sizeY = draw.textsize(nowstring, font = MEDIUMFONT)
+         if sizeX < imagegraph.right_border * SCALE:
+            x = rb - sizeX / 2
+         else:
+            x = imagegraph.width * SCALE - sizeX
+         draw.text((x, tb - sizeY), nowstring, fill="#bbbbbb", font = MEDIUMFONT)
+    # Draw Data
+    startdatetime = datetimenow
+    tlb = rb
+    for ts in time_series:
+        enddatetime = startdatetime
+        startdatetime = enddatetime - datetime.timedelta(ts.time_period_days)
+        trb = tlb
+        tlb = tlb - ts.width * SCALE
         sizeX, sizeY = draw.textsize(ts.label, font = MEDIUMFONT)
         draw.text((tlb - sizeX / 2, tb - sizeY), ts.label, fill="#bbbbbb", font = MEDIUMFONT)
         if ts.left_axis:
             draw.line((tlb, tb, tlb, bb), 
                        width = int(imagegraph.linethickness) * SCALE,
                        fill = "black")
+            slb = tb
             for ls in graph_series:
+                stb = slb
+                slb = stb + ls.pixel_height * SCALE
                 for l in ls.imagegraphseriesline_set.all():
                     if l.label:
                         options = {"font": SMALLFONT}
                         drawTickLabel(draw, 
-                                      "%s" % l.value, 
+                                      ("%%0.%df" % ls.decimal_places) % l.value, 
                                       tlb, 
-                                      ls.get_pos(l.value) * SCALE, 
+                                      slb - ls.get_pos(l.value) * SCALE, 
                                       l.label_colour, 
                                       **options)
                         if l.othervalue:
                             drawTickLabel(draw, 
-                                          "%s" % l.othervalue, 
+                                          ("%%0.%df" % ls.decimal_places) % l.othervalue, 
                                           tlb, 
-                                          ls.get_pos(l.othervalue) * SCALE, 
+                                          slb - ls.get_pos(l.othervalue) * SCALE, 
                                           l.label_colour, 
                                           **options)
+        slb = tb
         for ls in graph_series:
+          stb = slb
+          slb = stb + ls.pixel_height * SCALE
           if ls.other_observation_type:
-            p = [(trb - ts.get_pixels(enddatetime - n.datetime.replace(tzinfo=None)) * SCALE, ls.get_pos(n.value) * SCALE) 
+            p = [(trb - ts.get_pixels(enddatetime - n.datetime.replace(tzinfo=None)) * SCALE, slb - ls.get_pos(n.value) * SCALE) 
                  for n in NumericObservation.objects.filter(patient = patient, 
                                                        observation_type = ls.observation_type, 
                                                        datetime__lt = enddatetime, 
                                                        datetime__gt = startdatetime).order_by("datetime")]
-            o = [(trb - ts.get_pixels(enddatetime - n.datetime.replace(tzinfo=None)) * SCALE, ls.get_pos(n.value) * SCALE)
+            o = [(trb - ts.get_pixels(enddatetime - n.datetime.replace(tzinfo=None)) * SCALE, slb - ls.get_pos(n.value) * SCALE)
                  for n in NumericObservation.objects.filter(patient = patient, 
                                                        observation_type = ls.other_observation_type, 
                                                        datetime__lt = enddatetime, 
@@ -137,7 +182,7 @@ def image_graph(request, mrn, graph_name):
                                                        datetime__gt = startdatetime
                                                        ):
                 t = trb - ts.get_pixels(enddatetime - n.datetime.replace(tzinfo=None)) * SCALE
-                y = ls.get_pos(n.value) * SCALE
+                y = slb - ls.get_pos(n.value) * SCALE
                 draw.ellipse((t - DOTSIZE * SCALE, y - DOTSIZE * SCALE, t + DOTSIZE * SCALE, y + DOTSIZE * SCALE), ls.line_colour)
     del draw
     response=HttpResponse(content_type='image/png')
@@ -164,11 +209,17 @@ def drawTickLabel(draw, string, x, y, colour, **options):
                         draw.rectangle((x - 1, y - 1, x + sizeX, y + sizeY), fill = "white")
                         draw.text((x, y), string, fill=colour, **options)
 
-def drawValue(draw, (x, y), value, units, colour):
-    sizeX, sizeY = draw.textsize(" " + value, font = LARGEFONT)
+def drawValue(draw, (x, y), value, units, colour, maxWidth):
+    valSizeX, valSizeY = draw.textsize(" " + value, font = LARGEFONT)
     draw.text((x, y), " " + value, fill="black", font = LARGEFONT)
-    sizeunitsX, sizeunitsY = draw.textsize(value, font = SMALLFONT) 
-    draw.text((x + sizeX, y + sizeY - sizeunitsY), units, fill=colour, font = SMALLFONT)
+    unitsSizeX, unitsSizeY = draw.textsize(units, font = SMALLFONT) 
+    if valSizeX + unitsSizeX < maxWidth:
+        unitX = x + valSizeX
+        unitY = y + 0.9 * valSizeY - unitsSizeY
+    else:
+        unitX = x + maxWidth - unitsSizeX
+        unitY = y + valSizeY
+    draw.text((unitX, unitY), units, fill=colour, font = SMALLFONT)
 
 def vitalsVis(request, mrn):
     patient = get_object_or_404(Patient, mrn = mrn)
