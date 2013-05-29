@@ -35,7 +35,7 @@ img{
 #graph, #graphlabels{
 	float: left;
 }
-#date, #time, #obslabel, #obsunits , #fraction{
+#date, #time, #obslabel, #obsunits , #fraction, #ews{
 	color: gray;
 }
 #date, #time, #name, #dob, #mrn {
