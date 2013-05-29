@@ -16,7 +16,7 @@ Configure virtualenv by following instructions in /etc/bash_completion.d/virtual
 Create a virtual environment:
     mkvirtualenv -r requirements graphgrid
 
-Edit cellcounter/localsettings.py to contain the following:
+Edit graphgrid/localsettings.py to contain the following:
 DATABASES = {'default': {
     'ENGINE': 'django.db.backends.sqlite3',
     'NAME': '/path/to/graphgrid/db.sql'
@@ -24,6 +24,7 @@ DATABASES = {'default': {
 }
 
 STATICFILES_DIRS = ('/path/to/graphgrid/static/',)
+FONTS_DIR = '/home/martin/Repositories/graphgrid/fonts/'
 DEBUG = True
 
 Build the database:
