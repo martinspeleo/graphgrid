@@ -15,21 +15,25 @@ font-family: 'QuicksandBold';
 body {
 	width: 620px;
 }
-img
-{
+img{
 	display: block;
 }
-table, th, td, tr, img
-{
+img{
 	border: 0;
 	padding: 0;
 	margin: 0;
 	white-space: nowrap;
 }
-table, th, td, tr
-{
-	border-collapse: collapse;
-	border-spacing: 0;
+#graphcontainer{
+	border: 0;
+	padding: 0;
+	margin: 0;
+	white-space: nowrap;
+	width: 620px;
+	float: left;
+}
+#graph, #graphlabels{
+	float: left;
 }
 #date, #time, #obslabel, #obsunits , #fraction{
 	color: gray;
@@ -73,6 +77,9 @@ table, th, td, tr
 }
 #fraction {
 	padding: 0px;
+}
+#logo{
+	float: left;
 }
 #obs, #obslabel, #obsunits, #fraction {
 	padding: 0px 5px;
