@@ -25,9 +25,16 @@ table, th, td, tr
 {
 	border-collapse: collapse;
 }
-#graphcontainer
+#graphcontainer, #graphs, #unitscontainer
 {
 	float: left
+}
+#graphcontainer, #unitscontainer
+{
+	border: 0;
+	padding: 0;
+	margin: 0;
+	white-space: nowrap;
 }
 #date, #time, #obslabel, #obsunits , #fraction{
 	color: gray;
