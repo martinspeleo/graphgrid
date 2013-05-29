@@ -26,7 +26,7 @@ def graphgrid(request, graphgrid):
 
 def image_graph(request, mrn, graph_name):
 
-    datetimenow = datetime.datetime(2010,11,01)
+    datetimenow = datetime.datetime(2010,11,01, 7, 0)
     patient = get_object_or_404(Patient, mrn = mrn)
     imagegraph = get_object_or_404(imageGraph, name = graph_name)
     i = Image.new("RGB", 
@@ -66,6 +66,9 @@ def image_graph(request, mrn, graph_name):
          draw.line((rb, tb, rb, bb), 
               width = int(imagegraph.linethickness),
               fill = "black")
+         nowstring = datetimenow.strftime("%Y-%m-%d %H:%M")
+         sizeX, sizeY = draw.textsize(nowstring, font = MEDIUMFONT)
+         draw.text((rb - sizeX / 2, tb - sizeY), nowstring, fill="#bbbbbb", font = MEDIUMFONT)
     startdatetime = datetimenow
     tlb = rb
     for ts in time_series:
@@ -73,6 +76,14 @@ def image_graph(request, mrn, graph_name):
         startdatetime = enddatetime - datetime.timedelta(ts.time_period_days)
         trb = tlb
         tlb = tlb - ts.width * SCALE
+        previousmidnight = datetime.datetime(enddatetime.year, enddatetime.month, enddatetime.day)
+        while previousmidnight > startdatetime:
+            print previousmidnight, startdatetime
+            xpos = trb - ts.get_pixels(enddatetime - previousmidnight) * SCALE
+            draw.line((xpos, tb, xpos, bb), width = SCALE, fill="#dddddd")
+            previousmidnight = previousmidnight - datetime.timedelta(1)
+        sizeX, sizeY = draw.textsize(ts.label, font = MEDIUMFONT)
+        draw.text((tlb - sizeX / 2, tb - sizeY), ts.label, fill="#bbbbbb", font = MEDIUMFONT)
         if ts.left_axis:
             draw.line((tlb, tb, tlb, bb), 
                        width = int(imagegraph.linethickness) * SCALE,
