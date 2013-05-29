@@ -12,25 +12,25 @@ font-family: 'QuicksandBold';
     font-weight: normal;
     font-style: normal;
 	}
-
 body {
 	width: 620px;
 }
-p, td
+img
 {
-	white-space: nowrap
+	display: block;
 }
 table, th, td, tr, img
 {
 	border: 0;
 	padding: 0;
 	margin: 0;
+	white-space: nowrap;
 }
 table, th, td, tr
 {
-border-collapse:collapse;
+	border-collapse: collapse;
+	border-spacing: 0;
 }
-
 #date, #time, #obslabel, #obsunits , #fraction{
 	color: gray;
 }
