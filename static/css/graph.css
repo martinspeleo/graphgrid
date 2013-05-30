@@ -35,7 +35,7 @@ img{
 	float: left;
 }
 #date, #time, #obslabel, #obsunits , #fraction, #ews{
-	color: gray;
+	color: #ADADAD;
 }
 #date, #time, #name, #dob, #mrn {
 	padding:0px 20px;

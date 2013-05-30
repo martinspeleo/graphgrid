@@ -15,6 +15,7 @@ DOTSIZE = 1.5
 SMALLFONT = ImageFont.truetype(join(settings.FONTS_DIR, "Nunito-Bold.ttf"), 8 * SCALE)
 MEDIUMFONT = ImageFont.truetype(join(settings.FONTS_DIR, "Nunito-Bold.ttf"), 12 * SCALE)
 LARGEFONT = ImageFont.truetype(join(settings.FONTS_DIR, "Nunito-Bold.ttf"), 15 * SCALE)
+DATETIMENOW = datetime.datetime(2010,11, 1, 0, 59)
 
 def home(request):
     graphgrids = GraphGrid.objects.all()
@@ -26,7 +27,7 @@ def graphgrid(request, graphgrid):
 
 def image_graph(request, mrn, graph_name):
 
-    datetimenow = datetime.datetime(2010,11, 1, 0, 59)
+    datetimenow = DATETIMENOW
     patient = get_object_or_404(Patient, mrn = mrn)
     imagegraph = get_object_or_404(imageGraph, name = graph_name)
     i = Image.new("RGB", 
@@ -112,7 +113,7 @@ def image_graph(request, mrn, graph_name):
             x = rb - sizeX / 2
          else:
             x = imagegraph.width * SCALE - sizeX
-         draw.text((x, tb - sizeY), nowstring, fill="#bbbbbb", font = MEDIUMFONT)
+         #draw.text((x, tb - sizeY), nowstring, fill="#bbbbbb", font = MEDIUMFONT)
     # Draw Data
     startdatetime = datetimenow
     tlb = rb
@@ -224,7 +225,7 @@ def drawValue(draw, (x, y), value, units, colour, maxWidth):
 def vitalsVis(request, mrn):
     patient = get_object_or_404(Patient, mrn = mrn)
 	#Calculate the date/time limits for day lines + graph separation
-    datetimenow = datetime.datetime(2010,11,01, 0, 59) 
+    datetimenow = DATETIMENOW 
     #datetimenow = datetime.datetime.now() 
     datetimeoneday = datetime.datetime.strftime(datetimenow - datetime.timedelta(1), dateformat)
     datetimefivedays = datetime.datetime.strftime(datetimenow - datetime.timedelta(5), dateformat)
