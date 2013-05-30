@@ -224,7 +224,7 @@ def drawValue(draw, (x, y), value, units, colour, maxWidth):
 def vitalsVis(request, mrn):
     patient = get_object_or_404(Patient, mrn = mrn)
 	#Calculate the date/time limits for day lines + graph separation
-    datetimenow = datetime.datetime(2010,11,01) 
+    datetimenow = datetime.datetime(2010,11,01, 0, 59) 
     #datetimenow = datetime.datetime.now() 
     datetimeoneday = datetime.datetime.strftime(datetimenow - datetime.timedelta(1), dateformat)
     datetimefivedays = datetime.datetime.strftime(datetimenow - datetime.timedelta(5), dateformat)
@@ -256,9 +256,13 @@ def vitalsVis(request, mrn):
         recentHR = "%0.f" % NumericObservation.objects.filter( patient = patient, observation_type__name = "Heart Rate" ).order_by("-datetime")[0].value
     except:
         recentHR = "-"
+    try: 
+        recentConciousLevel = "%0.f" % NumericObservation.objects.filter( patient = patient, observation_type__name = "Concious Level" ).order_by("-datetime")[0].value
+    except:
+        recentConciousLevel = "-"
 	#calculate EWS
     try: 
-        recentEWSCalc = calculateEWS( recentRR, recentSpO2, recentTemp, recentSBP, recentHR, 0, 0 )
+        recentEWSCalc = calculateEWS( recentRR, recentSpO2, recentTemp, recentSBP, recentHR, recentConciousLevel, 0 )
         recentEWS = recentEWSCalc['EWS']
     except:
         recentEWS = "-"
@@ -268,4 +272,4 @@ def vitalsVis(request, mrn):
     except: 
         EWSColour = "EWSBlue"
     #Return patient, date and observation details
-    return render(request, 'vitalsvis.html', {'patient': patient, 'datenow': datenow, 'timenow': timenow, 'datetimeoneday': datetimeoneday, 'datetimefivedays': datetimefivedays, 'datetimezerodays': datetimezerodays, 'recentRR': recentRR, 'recentSpO2': recentSpO2, 'recentTemp': recentTemp, 'recentSBP': recentSBP, 'recentDBP': recentDBP, 'recentHR': recentHR, 'recentEWS': recentEWS, 'EWSColour': EWSColour, 'width': 290, 'height': 90, 'bpheight': 150})
+    return render(request, 'vitalsvis.html', {'patient': patient, 'datenow': datenow, 'timenow': timenow, 'recentEWS': recentEWS, 'EWSColour': EWSColour, 'width': 620, 'height': 510, 'bpheight': 150})
