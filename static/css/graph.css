@@ -78,7 +78,12 @@ img{
 	padding: 0px;
 }
 #logo{
+	width: 620px;
 	float: left;
+}
+#logoinner{
+	width: 50%;
+	margin: 0 auto;
 }
 #obs, #obslabel, #obsunits, #fraction {
 	padding: 0px 5px;

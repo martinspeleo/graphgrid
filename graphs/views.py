@@ -15,7 +15,7 @@ DOTSIZE = 1.5
 SMALLFONT = ImageFont.truetype(join(settings.FONTS_DIR, "Nunito-Bold.ttf"), 8 * SCALE)
 MEDIUMFONT = ImageFont.truetype(join(settings.FONTS_DIR, "Nunito-Bold.ttf"), 12 * SCALE)
 LARGEFONT = ImageFont.truetype(join(settings.FONTS_DIR, "Nunito-Bold.ttf"), 15 * SCALE)
-DATETIMENOW = datetime.datetime(2010,11, 1, 0, 59)
+DATETIMENOW = datetime.datetime(2010,11, 1, 05, 00)
 
 def home(request):
     graphgrids = GraphGrid.objects.all()

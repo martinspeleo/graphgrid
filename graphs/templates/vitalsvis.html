@@ -28,6 +28,8 @@
 	<img src="{% url "image_graph" patient.mrn "e" %}" width={{ width }} height={{ height }} border="0" />
 </div>
 <div id="logo">
-	<img src="{% static "images/vitalvis-logo-trans.png" %}">
+	<div id="logoinner">
+		<img src="{% static "images/vitalvis-logo-trans.png" %}">
+	</div>
 </div>
 {% endblock %}
