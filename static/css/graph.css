@@ -15,15 +15,13 @@ body {
 	width: 620px;
 }
 img{
-	display: block;
-}
-img{
 	border: 0;
 	padding: 0;
 	margin: 0;
 	white-space: nowrap;
+	display: block;
 }
-#graphcontainer{
+#graphcontainer, #detailscontainer{
 	border: 0;
 	padding: 0;
 	margin: 0;
@@ -34,8 +32,11 @@ img{
 #graph, #graphlabels{
 	float: left;
 }
-#date, #time, #obslabel, #obsunits , #fraction, #ews{
+#date, #time, #ews{
 	color: #ADADAD;
+}
+#news{
+	float: right
 }
 #date, #time, #name, #dob, #mrn {
 	padding:0px 20px;
@@ -69,13 +70,13 @@ img{
 	font-size: 200%;
 	font-weight: bold;
 }
-
+#dob, #mrn{
+	font-size: 100%;
+	font-weight: regular;
+}
 #news {
 	float: right;
 	align: right;
-}
-#fraction {
-	padding: 0px;
 }
 #logo{
 	width: 620px;
@@ -84,20 +85,4 @@ img{
 #logoinner{
 	width: 50%;
 	margin: 0 auto;
-}
-#obs, #obslabel, #obsunits, #fraction {
-	padding: 0px 5px;
-	margin: 0px;
-	white-space: nowrap;
-}
-#obslabel
-{
-	font-weight: bold;
-}
-#obslabel, #obsunits {
-	font-size: 80%;
-}
-#obs {
-	font-weight: bold;
-	font-size: 125%;
 }
