@@ -7,6 +7,7 @@ import datetime
 from PIL import Image, ImageDraw, ImageFont
 from django.conf import settings
 from os.path import join
+from django.contrib.auth.decorators import login_required
 
 dateformat = "%Y-%m-%d-%H-%M"
 
@@ -16,14 +17,17 @@ SMALLFONT = ImageFont.truetype(join(settings.FONTS_DIR, "Nunito-Bold.ttf"), 8 * 
 MEDIUMFONT = ImageFont.truetype(join(settings.FONTS_DIR, "Nunito-Bold.ttf"), 12 * SCALE)
 LARGEFONT = ImageFont.truetype(join(settings.FONTS_DIR, "Nunito-Bold.ttf"), 15 * SCALE)
 
+@login_required
 def home(request):
     graphgrids = GraphGrid.objects.all()
     return render(request, 'graphgrids.html', {'graphgrids': graphgrids})
 
+@login_required
 def graphgrid(request, graphgrid):
     graphgrid = get_object_or_404(GraphGrid, name = graphgrid)
     return render(request, 'graphgrid.html', {'graphgrid': graphgrid})
 
+@login_required
 def image_graph(request, mrn, graph_name):
 
     datetimenow = datetime.datetime(2010,11, 1, 0, 59)
@@ -221,6 +225,7 @@ def drawValue(draw, (x, y), value, units, colour, maxWidth):
         unitY = y + valSizeY
     draw.text((unitX, unitY), units, fill=colour, font = SMALLFONT)
 
+@login_required
 def vitalsVis(request, mrn):
     patient = get_object_or_404(Patient, mrn = mrn)
 	#Calculate the date/time limits for day lines + graph separation

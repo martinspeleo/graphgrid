@@ -4,7 +4,9 @@ from patients.models import *
 from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponse
 import json
+from django.contrib.auth.decorators import login_required
 
+@login_required
 def registerPatient(request):
     if request.method == 'POST':
         form = PatientForm(request.POST)
@@ -17,6 +19,7 @@ def registerPatient(request):
         "form": form,
     })
 
+@login_required
 def patientObservation(request):
     if request.method == 'POST':
         form = NumericObservationForm(request.POST)
@@ -28,6 +31,7 @@ def patientObservation(request):
         "form": form,
     })
 
+@login_required
 def getObs(request, mrn, obs):
     patient = get_object_or_404(Patient, mrn = mrn)
     numericobservationtype = get_object_or_404(NumericObservationType, name = obs)
@@ -36,6 +40,7 @@ def getObs(request, mrn, obs):
     response.write(json.dumps([(o.datetime.isoformat(), o.value) for o in obs]))
     return response
 
+@login_required
 def g(request, mrn, obs, start, end, compass, height, width, min_, max_, refmin, refmax):
     import random
     import django
