@@ -16,6 +16,7 @@ DOTSIZE = 1.5
 SMALLFONT = ImageFont.truetype(join(settings.FONTS_DIR, "Nunito-Bold.ttf"), 8 * SCALE)
 MEDIUMFONT = ImageFont.truetype(join(settings.FONTS_DIR, "Nunito-Bold.ttf"), 12 * SCALE)
 LARGEFONT = ImageFont.truetype(join(settings.FONTS_DIR, "Nunito-Bold.ttf"), 15 * SCALE)
+DATETIMENOW = datetime.datetime(2010,11, 1, 05, 00)
 
 @login_required
 def home(request):
@@ -30,7 +31,7 @@ def graphgrid(request, graphgrid):
 @login_required
 def image_graph(request, mrn, graph_name):
 
-    datetimenow = datetime.datetime(2010,11, 1, 0, 59)
+    datetimenow = DATETIMENOW
     patient = get_object_or_404(Patient, mrn = mrn)
     imagegraph = get_object_or_404(imageGraph, name = graph_name)
     i = Image.new("RGB", 
@@ -116,7 +117,7 @@ def image_graph(request, mrn, graph_name):
             x = rb - sizeX / 2
          else:
             x = imagegraph.width * SCALE - sizeX
-         draw.text((x, tb - sizeY), nowstring, fill="#bbbbbb", font = MEDIUMFONT)
+         #draw.text((x, tb - sizeY), nowstring, fill="#bbbbbb", font = MEDIUMFONT)
     # Draw Data
     startdatetime = datetimenow
     tlb = rb
@@ -229,7 +230,7 @@ def drawValue(draw, (x, y), value, units, colour, maxWidth):
 def vitalsVis(request, mrn):
     patient = get_object_or_404(Patient, mrn = mrn)
 	#Calculate the date/time limits for day lines + graph separation
-    datetimenow = datetime.datetime(2010,11,01) 
+    datetimenow = DATETIMENOW 
     #datetimenow = datetime.datetime.now() 
     datetimeoneday = datetime.datetime.strftime(datetimenow - datetime.timedelta(1), dateformat)
     datetimefivedays = datetime.datetime.strftime(datetimenow - datetime.timedelta(5), dateformat)
@@ -261,9 +262,13 @@ def vitalsVis(request, mrn):
         recentHR = "%0.f" % NumericObservation.objects.filter( patient = patient, observation_type__name = "Heart Rate" ).order_by("-datetime")[0].value
     except:
         recentHR = "-"
+    try: 
+        recentConciousLevel = "%0.f" % NumericObservation.objects.filter( patient = patient, observation_type__name = "Concious Level" ).order_by("-datetime")[0].value
+    except:
+        recentConciousLevel = "-"
 	#calculate EWS
     try: 
-        recentEWSCalc = calculateEWS( recentRR, recentSpO2, recentTemp, recentSBP, recentHR, 0, 0 )
+        recentEWSCalc = calculateEWS( recentRR, recentSpO2, recentTemp, recentSBP, recentHR, recentConciousLevel, 0 )
         recentEWS = recentEWSCalc['EWS']
     except:
         recentEWS = "-"
@@ -273,4 +278,4 @@ def vitalsVis(request, mrn):
     except: 
         EWSColour = "EWSBlue"
     #Return patient, date and observation details
-    return render(request, 'vitalsvis.html', {'patient': patient, 'datenow': datenow, 'timenow': timenow, 'datetimeoneday': datetimeoneday, 'datetimefivedays': datetimefivedays, 'datetimezerodays': datetimezerodays, 'recentRR': recentRR, 'recentSpO2': recentSpO2, 'recentTemp': recentTemp, 'recentSBP': recentSBP, 'recentDBP': recentDBP, 'recentHR': recentHR, 'recentEWS': recentEWS, 'EWSColour': EWSColour, 'width': 290, 'height': 90, 'bpheight': 150})
+    return render(request, 'vitalsvis.html', {'patient': patient, 'datenow': datenow, 'timenow': timenow, 'recentEWS': recentEWS, 'EWSColour': EWSColour, 'width': 620, 'height': 510, 'bpheight': 150})
